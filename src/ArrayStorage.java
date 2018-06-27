@@ -2,32 +2,55 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    Resume[] storage = new Resume[100];
 
     void clear() {
-        Arrays.setAll(storage, null );
+
+        Arrays.fill(storage, null);
     }
 
     void save(Resume r) {
-        int pos = storage.length;
-        storage[pos +1] = r;
+        Resume[] resumes = getAll();
+        int pos=0;
+        for(int i = 0; i < resumes.length; i++)
+        {
+            if(resumes[i] == null)
+            {
+                pos = i;
+                break;
+
+            }
+        }
+        resumes[pos] = r;
+        storage = resumes;
 
     }
 
     Resume get(String uuid) {
         List<Resume>  resumeList = Arrays.asList(getAll());
-        Resume r = ((Resume) resumeList.stream().filter(resume -> resume.uuid.equals(uuid)));
-        return r;
+        try {
+            return resumeList.stream().filter(resume -> resume.uuid.equals(uuid)).findFirst().get();
+        }
+        catch (NullPointerException npe)
+        {
+            System.out.println("No such resume");
+        }
+
+            return null;
+
+
     }
 
     void delete(String uuid) {
         List<Resume>  resumeList = Arrays.asList(getAll());
-        Resume r = ((Resume) resumeList.stream().filter(resume -> resume.uuid.equals(uuid)));
-        resumeList.remove(r);
+        Resume r = (resumeList.stream().filter(resume -> resume.uuid.equals(uuid)).findFirst().get());
+        resumeList.toArray(storage);
+        storage[resumeList.indexOf(r)] = null;
     }
 
     /**
@@ -37,15 +60,25 @@ public class ArrayStorage {
         List<Resume> resultStorage = new ArrayList<>();
         for(Resume r : storage)
         {
-            if (r!=null)
-            {
+            if (r != null)
                 resultStorage.add(r);
-            }
         }
-        return (Resume[])resultStorage.toArray();
+        Resume[] resumes = new Resume[100];
+        return resultStorage.toArray(resumes);
     }
 
     int size() {
-        return getAll().length;
+        storage = getAll();
+        int size = 0;
+        for(int i = 0; i < storage.length; i++)
+        {
+            if(storage[i] == null)
+            {
+                size = i;
+                break;
+
+            }
+        }
+        return size;
     }
 }
