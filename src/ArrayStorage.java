@@ -17,8 +17,6 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        Resume[] resumes = getAll();
-
         List<Resume>  resumeList = new ArrayList<>(Arrays.asList(getAll()));
         resumeList.add(r);
 
@@ -28,7 +26,6 @@ public class ArrayStorage {
 
     Resume get(String uuid) {
         List<Resume>  resumeList = new ArrayList<>(Arrays.asList(getAll()));
-        Resume resume1 = new Resume();
         try {
             return resumeList.stream().filter(resume -> resume.uuid.equals(uuid)).findFirst().get();
         }
@@ -55,7 +52,7 @@ public class ArrayStorage {
     Resume[] getAll() {
         List<Resume> resultStorage;
 
-        resultStorage = new ArrayList<>(Arrays.asList(storage)).stream().filter(r-> r != null).collect(Collectors.toList());
+        resultStorage = new ArrayList<>(Arrays.asList(storage)).stream().filter(Objects::nonNull).collect(Collectors.toList());
 
         Resume[] resumes = new Resume[resultStorage.size()];
         return resultStorage.toArray(resumes);
