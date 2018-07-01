@@ -56,13 +56,7 @@ public class ArrayStorage {
 
         Resume[] resumes = new Resume[resultStorage.size()];
         return resultStorage.toArray(resumes);
-        /*for(Resume r : storage)
-        {
-            if (r != null)
-                resultStorage.add(r);
-        }
-        Resume[] resumes = new Resume[100];
-        return resultStorage.toArray(resumes);*/
+
     }
 
     int size() {
