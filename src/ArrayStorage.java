@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -12,38 +11,53 @@ public class ArrayStorage {
     Resume[] storage = new Resume[100];
 
     void clear() {
-
         Arrays.fill(storage, null);
     }
 
-    void save(Resume r) {
-        List<Resume>  resumeList = new ArrayList<>(Arrays.asList(getAll()));
-        resumeList.add(r);
-
-        resumeList.toArray(storage);
-
+    void save(Resume resume) {
+        List<Resume>  resumeList = Arrays.asList(getAll());
+        if(resumeList.contains(resume)) {
+            update(resume);
+        }
+        else {
+            resumeList.add(resume);
+            resumeList.toArray(storage);
+        }
     }
 
+
+    void update(Resume resume) {
+        List<Resume>  resumeList = Arrays.asList(getAll());
+        if(resumeList.contains(resume)) {
+            Resume r = resumeList.stream().filter(res -> res.uuid.equals(resume.uuid)).findFirst().get();
+
+            storage[resumeList.indexOf(r)] = resume;
+        }
+        else
+            System.out.println("Resume not found");
+    }
+
+
     Resume get(String uuid) {
-        List<Resume>  resumeList = new ArrayList<>(Arrays.asList(getAll()));
-        try {
-            return resumeList.stream().filter(resume -> resume.uuid.equals(uuid)).findFirst().get();
+        List<Resume>  resumeList = Arrays.asList(getAll());
+        if(resumeList.stream().anyMatch(res -> res.uuid.equals(uuid))) {
+            return resumeList.stream().filter(res -> res.uuid.equals(uuid)).findFirst().get();
+
         }
-        catch (Exception e)
-        {
-            System.out.println("No such resume");
-        }
-
-            return null;
-
-
+        else
+            System.out.println("Resume not found");
+        return null;
     }
 
     void delete(String uuid) {
         List<Resume>  resumeList = Arrays.asList(getAll());
-        Resume r = (resumeList.stream().filter(resume -> resume.uuid.equals(uuid)).findFirst().get());
-        resumeList.toArray(storage);
-        storage[resumeList.indexOf(r)] = null;
+        if(resumeList.stream().anyMatch(res -> res.uuid.equals(uuid))) {
+            Resume r = (resumeList.stream().filter(resume -> resume.uuid.equals(uuid)).findFirst().get());
+            resumeList.toArray(storage);
+            storage[resumeList.indexOf(r)] = null;
+        }
+        else
+            System.out.println("Resume not found");
     }
 
     /**
@@ -52,16 +66,15 @@ public class ArrayStorage {
     Resume[] getAll() {
         List<Resume> resultStorage;
 
-        resultStorage = new ArrayList<>(Arrays.asList(storage)).stream().filter(Objects::nonNull).collect(Collectors.toList());
+        resultStorage = Arrays.stream(storage).filter(Objects::nonNull).collect(Collectors.toList());
 
         Resume[] resumes = new Resume[resultStorage.size()];
-        return resultStorage.toArray(resumes);
 
+        return resultStorage.toArray(resumes);
     }
 
     int size() {
         storage = getAll();
-
         return storage.length;
     }
 }
