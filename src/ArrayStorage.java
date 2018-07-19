@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[100];
+    Resume[] storage = new Resume[10000];
 
     void clear() {
         Arrays.fill(storage, null);
@@ -29,7 +29,7 @@ public class ArrayStorage {
     void update(Resume resume) {
         List<Resume>  resumeList = Arrays.asList(getAll());
         if(resumeList.contains(resume)) {
-            Resume r = resumeList.stream().filter(res -> res.uuid.equals(resume.uuid)).findFirst().get();
+            Resume r = resumeList.stream().filter(res -> res.getUuid().equals(resume.getUuid())).findFirst().get();
 
             storage[resumeList.indexOf(r)] = resume;
         }
@@ -40,8 +40,8 @@ public class ArrayStorage {
 
     Resume get(String uuid) {
         List<Resume>  resumeList = Arrays.asList(getAll());
-        if(resumeList.stream().anyMatch(res -> res.uuid.equals(uuid))) {
-            return resumeList.stream().filter(res -> res.uuid.equals(uuid)).findFirst().get();
+        if(resumeList.stream().anyMatch(res -> res.getUuid().equals(uuid))) {
+            return resumeList.stream().filter(res -> res.getUuid().equals(uuid)).findFirst().get();
 
         }
         else
@@ -51,8 +51,8 @@ public class ArrayStorage {
 
     void delete(String uuid) {
         List<Resume>  resumeList = Arrays.asList(getAll());
-        if(resumeList.stream().anyMatch(res -> res.uuid.equals(uuid))) {
-            Resume r = (resumeList.stream().filter(resume -> resume.uuid.equals(uuid)).findFirst().get());
+        if(resumeList.stream().anyMatch(res -> res.getUuid().equals(uuid))) {
+            Resume r = (resumeList.stream().filter(resume -> resume.getUuid().equals(uuid)).findFirst().get());
             resumeList.toArray(storage);
             storage[resumeList.indexOf(r)] = null;
         }
