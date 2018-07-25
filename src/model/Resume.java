@@ -5,28 +5,22 @@ import java.util.UUID;
 /**
  * com.urise.webapp.model.Resume class
  */
-public class Resume implements Comparable<Resume>{
+public class Resume implements Comparable<Resume> {
 
-        // Unique identifier
-        private final String uuid;
+    // Unique identifier
+    private final String uuid;
 
-        public Resume()
-        {
-            this(UUID.randomUUID().toString());
-        }
+    public Resume() {
+        this(UUID.randomUUID().toString());
+    }
 
-        public Resume(String uuid)
-        {
-            this.uuid = uuid;
-        }
+    public Resume(String uuid) {
+        this.uuid = uuid;
+    }
 
-        public String getUuid() {
-            return uuid;
-        }
-
-        //public void setUuid(String uuid) {
-        //    this.uuid = uuid;
-        //}
+    public String getUuid() {
+        return uuid;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -43,10 +37,10 @@ public class Resume implements Comparable<Resume>{
         return uuid.hashCode();
     }
 
-        @Override
-        public String toString() {
-            return uuid;
-        }
+    @Override
+    public String toString() {
+        return uuid;
+    }
 
     @Override
     public int compareTo(Resume o) {
